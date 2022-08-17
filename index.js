@@ -41,6 +41,27 @@ app.get("/userss", async (req, res) => {
   res.send(userData);
 });
 
+app.post("/add-question", async (req, res) => {
+    const question = new Questions();
+    question.question = req.body.question;
+    question.answer_options[0] = req.body.answer_options[0]; 
+    question.answer_options[1] = req.body.answer_options[1]; 
+    question.answer_options[2] = req.body.answer_options[2]; 
+    question.answer_options[3] = req.body.answer_options[3]; 
+    question.category = req.body.category;
+    question.type = req.body.type;
+    await question.save((err, question) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    } else {
+      console.log(question);
+      res.send(question);
+    }
+  });
+})
+
+
 
 app.get("/questions", async (req, res) => {
   try {
