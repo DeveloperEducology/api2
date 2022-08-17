@@ -7,6 +7,9 @@ const port = process.env.PORT || 3000;
 const db = require("./models");
 const userss = require("./models/User");
 
+const Product = require("./models/Product");
+const Questions = require("./models/Question");
+
 const URL = `mongodb+srv://educology:educology123@educology.b5cu0.mongodb.net/Educology?retryWrites=true&w=majority`;
 /* 
     Incase you are using mongodb atlas database uncomment below line
@@ -37,6 +40,23 @@ app.get("/userss", async (req, res) => {
   console.log(userData);
   res.send(userData);
 });
+
+
+app.get("/questions", async (req, res) => {
+  try {
+    let questions = await Questions.find();
+
+    if (questions.length > 0) {
+      console.log(questions);
+      res.send(questions);
+    } else {
+      res.send({ result: "No questions found" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 
 
 app.listen(port, () => {
