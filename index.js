@@ -4,7 +4,8 @@ const app = express();
 const mongoose = require("mongoose");
 const port = process.env.PORT || 3000;
 
-
+const db = require("./models");
+const userss = require("./models/User");
 
 const URL = `mongodb+srv://educology:educology123@educology.b5cu0.mongodb.net/Educology?retryWrites=true&w=majority`;
 /* 
