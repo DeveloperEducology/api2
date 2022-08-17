@@ -1,12 +1,30 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
+const mongoose = require("mongoose");
 const port = process.env.PORT || 3000;
 
+
+
+const URL = `mongodb+srv://educology:educology123@educology.b5cu0.mongodb.net/Educology?retryWrites=true&w=majority`;
 /* 
     Incase you are using mongodb atlas database uncomment below line
     and replace "mongoAtlasUri" with your mongodb atlas uri.
 */
-// mongoose.connect( mongoAtlasUri, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose
+  .connect(URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Successfully connected to MongoDB.");
+  })
+  .catch((err) => {
+    console.error("Connection error", err);
+    process.exit();
+  });
+
+
+
+app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
