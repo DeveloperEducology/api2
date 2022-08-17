@@ -30,6 +30,14 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/userss", async (req, res) => {
+  let userData = await userss.find();
+  userData.length;
+  console.log(userData);
+  res.send(userData);
+});
+
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
