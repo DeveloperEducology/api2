@@ -9,6 +9,8 @@ const userss = require("./models/User");
 
 const Product = require("./models/Product");
 const Questions = require("./models/Question");
+const Categories = require("./models/HomeCategory");
+const Subjectss = require("./models/SubjectCategory");
 
 const URL = `mongodb+srv://educology:educology123@educology.b5cu0.mongodb.net/Educology?retryWrites=true&w=majority`;
 /* 
@@ -25,8 +27,6 @@ mongoose
     process.exit();
   });
 
-
-
 app.use(express.json());
 app.use(cors());
 
@@ -41,18 +41,82 @@ app.get("/userss", async (req, res) => {
   res.send(userData);
 });
 
+app.post("/add-category", async (req, res) => {
+  const category = new Categories();
+  category.title = req.body.title;
+  await category.save((err, category) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    } else {
+      console.log(category);
+      res.send(category);
+    }
+  });
+});
+
+app.get("/categories", async (req, res) => {
+  try {
+    let cat = await Categories.find();
+
+    if (cat.length > 0) {
+      console.log(cat);
+      res.send(cat);
+    } else {
+      res.send({ result: "No categories found" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+app.post("/add-subject", async (req, res) => {
+  const subject = new Subjectss();
+  subject.categoryIds[0] = req.body.categoryIds[0];
+  subject.categoryIds[1] = req.body.categoryIds[1];
+  subject.categoryIds[2] = req.body.categoryIds[2];
+  subject.title = req.body.title;
+  await subject.save((err, subject) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    } else {
+      console.log(subject);
+      res.send(subject);
+    }
+  });
+});
+
+
+app.get("/subjectss", async (req, res) => {
+  try {
+    let sub = await Subjectss.find();
+
+    if (sub.length > 0) {
+      console.log(sub);
+      res.send(sub);
+    } else {
+      res.send({ result: "No categories found" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 app.post("/add-question", async (req, res) => {
-    const question = new Questions();
-    question.question = req.body.question;
-    question.options[0] = req.body.options[0]; 
-    question.options[1] = req.body.options[1]; 
-    question.options[2] = req.body.options[2]; 
-    question.options[3] = req.body.options[3]; 
-    question.correct_option = req.body.correct_option;
-    question.right_answer[0] = req.body.right_answer[0];
-    question.category = req.body.category;
-    question.type = req.body.type;
-    await question.save((err, question) => {
+  const question = new Questions();
+  question.question = req.body.question;
+  question.options[0] = req.body.options[0];
+  question.options[1] = req.body.options[1];
+  question.options[2] = req.body.options[2];
+  question.options[3] = req.body.options[3];
+  question.correct_option = req.body.correct_option;
+  question.right_answer[0] = req.body.right_answer[0];
+  question.category = req.body.category;
+  question.type = req.body.type;
+  await question.save((err, question) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -61,11 +125,7 @@ app.post("/add-question", async (req, res) => {
       res.send(question);
     }
   });
-})
-
-
-
-
+});
 
 app.get("/questions", async (req, res) => {
   try {
@@ -81,8 +141,6 @@ app.get("/questions", async (req, res) => {
     console.log(err);
   }
 });
-
-
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
