@@ -11,7 +11,7 @@ const Product = require("./models/Product");
 const Questions = require("./models/Question");
 const Categories = require("./models/HomeCategory");
 const Subjectss = require("./models/SubjectCategory");
-const Chapterss = require("./models/ChapterCategory");
+const FinalData = require("./models/FinalDataCategory");
 
 const URL = `mongodb+srv://educology:educology123@educology.b5cu0.mongodb.net/Educology?retryWrites=true&w=majority`;
 /* 
@@ -105,31 +105,35 @@ app.get("/subjectss", async (req, res) => {
   }
 });
 
-
-app.post("/add-chapter", async (req, res) => {
-  const chapter = new Chapterss();
-  chapter.categoryIds[0] = req.body.categoryIds[0];
-  chapter.subjectIds[0] = req.body.subjectIds[0];
-  chapter.title = req.body.title;
-  await chapter.save((err, chapter) => {
+app.post("/add-data", async (req, res) => {
+  const data = new FinalData();
+  data.categoryIds[0] = req.body.categoryIds[0];
+  
+  data.title = req.body.title;
+  data.affordability = req.body.affordability;
+  data.complexity = req.body.complexity;
+  data.imageUrl = req.body.imageUrl;
+  data.duration = req.body.duration;
+  data.url = req.body.url; 
+  await data.save((err, data) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     } else {
-      console.log(chapter);
-      res.send(chapter);
+      console.log(data);
+      res.send(data);
     }
   });
 });
 
 
-app.get("/chapterss", async (req, res) => {
+app.get("/datas", async (req, res) => {
   try {
-    let chap = await Chapterss.find();
+    let datas = await FinalData.find();
 
-    if (chap.length > 0) {
-      console.log(chap);
-      res.send(chap);
+    if (datas.length > 0) {
+      console.log(datas);
+      res.send(datas);
     } else {
       res.send({ result: "No categories found" });
     }
@@ -137,6 +141,7 @@ app.get("/chapterss", async (req, res) => {
     console.log(err);
   }
 });
+
 
 
 
