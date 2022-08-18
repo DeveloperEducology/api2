@@ -11,6 +11,7 @@ const Product = require("./models/Product");
 const Questions = require("./models/Question");
 const Categories = require("./models/HomeCategory");
 const Subjectss = require("./models/SubjectCategory");
+const Chapterss = require("./models/ChapterCategory");
 
 const URL = `mongodb+srv://educology:educology123@educology.b5cu0.mongodb.net/Educology?retryWrites=true&w=majority`;
 /* 
@@ -103,6 +104,41 @@ app.get("/subjectss", async (req, res) => {
     console.log(err);
   }
 });
+
+
+app.post("/add-chapter", async (req, res) => {
+  const chapter = new Chapterss();
+  chapter.categoryIds[0] = req.body.categoryIds[0];
+  chapter.subjectIds[0] = req.body.subjectIds[0];
+  chapter.title = req.body.title;
+  await chapter.save((err, chapter) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    } else {
+      console.log(chapter);
+      res.send(chapter);
+    }
+  });
+});
+
+
+app.get("/chapterss", async (req, res) => {
+  try {
+    let chap = await Chapterss.find();
+
+    if (chap.length > 0) {
+      console.log(chap);
+      res.send(chap);
+    } else {
+      res.send({ result: "No categories found" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
 
 
 app.post("/add-question", async (req, res) => {
