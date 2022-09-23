@@ -156,7 +156,7 @@ app.post("/add-question", async (req, res) => {
   question.correct_option = req.body.correct_option;
   question.right_answer[0] = req.body.right_answer[0];
   question.category = req.body.category;
-  question.type = req.body.type;
+  question.qn_type = req.body.qn_type;
   await question.save((err, question) => {
     if (err) {
       res.status(500).send({ message: err });
